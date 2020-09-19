@@ -19,14 +19,16 @@ class _MainState extends State<Main> {
   var recorder;
   Directory tmpDir;
   bool recording = false;
+
   @override
   void initState() {
     () async {
       tmpDir = await getTemporaryDirectory();
-      File("${tmpDir.path}/recording.m4a").delete();
+      if (await File("${tmpDir.path}/recording.m4a").exists())
+        File("${tmpDir.path}/recording.m4a").delete();
       await FlutterAudioRecorder.hasPermissions;
       recorder = FlutterAudioRecorder("${tmpDir.path}/recording.m4a",
-          audioFormat: AudioFormat.AAC); // .wav .aac .m4a
+          audioFormat: AudioFormat.AAC);
       await recorder.initialized;
     }();
     super.initState();
